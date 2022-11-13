@@ -4,13 +4,14 @@
 const char* ssid = "VitaoDrum";
 const char* password = "vitaoDrum";
 
-const int piezo_caixa = 33;
-const int piezo_chimbal = 32;
-const int piezo_bumbo = 35;
+const int piezo_snare = 33;
+const int piezo_hihat = 32;
+const int piezo_kick = 35;
 const int piezo_tom = 34;
-int caixa_value = 0;
-int chimbal_value = 0;
-int bumbo_value = 0;
+
+int snare_value = 0;
+int hihat_value = 0;
+int kick_value = 0;
 int tom_value = 0;
 
 AsyncWebServer server(80);
@@ -45,22 +46,24 @@ void setup() {
 }
 
 void loop() {
-  caixa_value = analogRead(piezo_caixa);
-  chimbal_value = analogRead(piezo_chimbal);
-  bumbo_value = analogRead(piezo_bumbo);
+  snare_value = analogRead(piezo_snare);
+  hihat_value = analogRead(piezo_hihat);
+  kick_value = analogRead(piezo_kick);
   tom_value = analogRead(piezo_tom);
-  int caixa = map(caixa_value, 0, 4095, 0, 99);
-  int chimbal = map(chimbal_value, 0, 4095, 0, 99);
-  int bumbo = map(bumbo_value, 0, 4095, 0, 99);
-  int tom = map(tom_value, 0, 4095, 0, 99);
+
+  int snare = snare_value;
+  int hihat = hihat_value;
+  int kick = kick_value;
+  int tom = tom_value;
   
-    Serial.println(tom_value);
-  if ( tom > 0) {
-    ws.textAll("{\"caixa\":" + String(caixa) + ",\"chimbal\":" + String(chimbal) +",\"bumbo\":" + String(bumbo) + ",\"tom\":" + String(tom) +"}");
-    
-    
-}
 
+  if (snare > 50 || hihat > 50 || kick > 50 || tom > 50 ) {
+    Serial.print("caixa" + String(snare) + " ");
+    Serial.print("hihat" + String(hihat) + " ");
+    Serial.print("kick" + String(kick) + " ");
+    Serial.print("tom" + String(tom) + " ");
 
-  delay(150);
+    ws.textAll("{\"snare\":" + String(snare) + ",\"hihat\":" + String(hihat) + ",\"kick\":" + String(kick) + ",\"tom\":" + String(tom) + "}");
+  }
+  delay(30);
 }
